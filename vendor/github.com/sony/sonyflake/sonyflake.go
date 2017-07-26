@@ -8,11 +8,9 @@ package sonyflake
 
 import (
 	"database/sql"
-	"fmt"
-	//"encoding/json"
 	"errors"
-	//"fmt"
 
+	"fmt"
 	"net"
 	"sync"
 	"time"
@@ -56,14 +54,19 @@ type Sonyflake struct {
 	machineID   uint16
 }
 
+// GlobalVal is a goroutine pool
 type GlobalVal struct {
 	ch       chan uint64
 	Poolsize int
 	Slice    []*Sonyflake
 }
 
+// a mysql db
 var db *sql.DB
 
+// NewGlobal returns a new Global Sonyflake configured with the given Settings.
+// NewGlobal Initialize poolsize with passed parameters
+// Set the length of the channel to 100
 func (gl *GlobalVal) NewGlobal(size int) *GlobalVal {
 
 	gbl := &GlobalVal{
@@ -75,7 +78,6 @@ func (gl *GlobalVal) NewGlobal(size int) *GlobalVal {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("poolsize:", gbl.Poolsize)
 	for i := 0; i < gbl.Poolsize; i++ {
 		var st Settings
 		st.MachineID = genMachineID
@@ -92,6 +94,7 @@ func (gl *GlobalVal) NewGlobal(size int) *GlobalVal {
 	return gbl
 }
 
+// Generates a globally unique id in a concurrency way
 func (gl *GlobalVal) GenId() {
 	for i := 0; i < len(gl.Slice); i++ {
 
@@ -105,6 +108,9 @@ func (gl *GlobalVal) GenId() {
 	}
 }
 
+//GetId return a uint64 id which client requested by a channel
+//the default timeout is 10sec,If more than 10 seconds has not yet taken the data
+//return the time out error to the client
 func (gl *GlobalVal) GetId() (uint64, error) {
 	select {
 	case id := <-gl.ch:
@@ -115,14 +121,7 @@ func (gl *GlobalVal) GetId() (uint64, error) {
 
 }
 
-/*
-	函数名:getMysqlID
-	功能：获取mysql 自增id
-	参数：无
-	返回值：
-		uint16格式的mysql auto_increment id
-		error
-*/
+//getMysqlID return a mysql auto_increment id.
 func getMysqlID() (uint16, error) {
 	id, err := mysql.MysqlSelect(db)
 	if err != nil {
@@ -133,41 +132,37 @@ func getMysqlID() (uint16, error) {
 
 }
 
-/*
-	函数名:getMachineID
-	功能：获取machineID
-	参数：无
-	返回值：
-		machineID值
-		error
-*/
+//genMachineID return a machineID Consists of lower16BitPrivateIP and mysql auto_increment id.
 func genMachineID() (uint16, error) {
-	addrs, err := net.InterfaceAddrs()
+	/*addrs, err := net.InterfaceAddrs()
 
 	if err != nil {
 		return 0, err
 	}
-	var ip net.IP
-	for _, address := range addrs {
+		var ip net.IP
+		for _, address := range addrs {
 
-		// 检查ip地址判断是否回环地址
-		if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
-			if ipnet.IP.To4() != nil {
-				ip = net.ParseIP(ipnet.IP.String()).To4()
+			if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+				if ipnet.IP.To4() != nil {
+					ip = net.ParseIP(ipnet.IP.String()).To4()
 
-				if ip == nil {
-					return 0, err
+					if ip == nil {
+						return 0, err
+					}
+					continue
 				}
-				continue
-			}
 
-		}
+			}
+		}*/
+	ip, err := lower16BitPrivateIP()
+	if err != nil {
+		return 0, err
 	}
 	mysql_id, err := getMysqlID()
 	if err != nil {
 		return 0, err
 	}
-	return uint16(ip[2])<<8 + uint16(ip[3]) + mysql_id, nil
+	return ip + mysql_id, nil
 }
 
 // NewSonyflake returns a new Sonyflake configured with the given Settings.
@@ -228,6 +223,8 @@ func (sf *Sonyflake) NextID() (uint64, error) {
 	return sf.toID()
 }
 
+// ChanNextID generates a next unique ID.
+// Write id to the incoming parameter channel
 func (sf *Sonyflake) ChanNextID(ch *chan uint64) {
 	const maskSequence = uint16(1<<BitLenSequence - 1)
 

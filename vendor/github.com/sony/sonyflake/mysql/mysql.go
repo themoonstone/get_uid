@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"database/sql"
+	"fmt"
 	//"fmt"
 	"time"
 
@@ -13,6 +14,7 @@ var (
 	dbusername  = "root"
 	dbpassword  = "123456"
 	dbtablename = "guid_mutex"
+	dbname      = "guid"
 )
 
 func checkErr(err error) {
@@ -29,7 +31,8 @@ func init() {
 
 func MysqlConn() (*sql.DB, error) {
 	var err error
-	db, err = sql.Open("mysql", "root:123456@tcp(192.168.1.175:3306)/guid?charset=utf8")
+	connSql := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8", dbusername, dbpassword, dbhostip, dbname)
+	db, err = sql.Open("mysql", connSql)
 	if err != nil {
 		return nil, err
 	}
@@ -38,11 +41,12 @@ func MysqlConn() (*sql.DB, error) {
 
 func MysqlSelect(db *sql.DB) (int64, error) {
 	Tx, _ := db.Begin()
-	stmt, err := db.Prepare("INSERT guid_mutex SET user=?,time=?")
+	insertSql := fmt.Sprintf("INSERT %s SET time=?", dbtablename)
+	stmt, err := db.Prepare(insertSql)
 	if err != nil {
 		return 0, err
 	}
-	res, err := stmt.Exec("troy", MysqlTime())
+	res, err := stmt.Exec(MysqlTime())
 	if err != nil {
 		return 0, err
 	}

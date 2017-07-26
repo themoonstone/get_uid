@@ -13,8 +13,10 @@ import (
 var gl sonyflake.GlobalVal
 var gs *sonyflake.GlobalVal
 
+// Initalize the global config
+// the default count of goroutine is 10
 func InitId() {
-	gl.Poolsize = 1
+	gl.Poolsize = 10
 	gs = gl.NewGlobal(gl.Poolsize)
 	gs.GenId()
 }
@@ -29,6 +31,8 @@ func main() {
 
 }
 
+// the restful api
+// call it by curl localhost:port/user/getuid
 func getuid(w http.ResponseWriter, r *http.Request) {
 	id, err := gs.GetId()
 	if err != nil {
