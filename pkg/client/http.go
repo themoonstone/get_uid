@@ -16,15 +16,18 @@ const (
 	path = "/user/getuid"
 )
 
+// a url of the client request
 type ReqClient struct {
 	url *url.URL
 }
 
+//Server-side response
 type Response struct {
 	Body   io.ReadCloser
 	String string
 }
 
+//constructs a usable Client for a single remote method.
 func NewHttpClient(host string) *ReqClient {
 
 	return &ReqClient{
@@ -35,6 +38,7 @@ func NewHttpClient(host string) *ReqClient {
 	}
 }
 
+// send a request to get the guid
 func (c *ReqClient) SendRequest() (interface{}, error) {
 	var (
 		encode = func(context.Context, *http.Request, interface{}) error { return nil }
@@ -65,6 +69,8 @@ type Uid struct {
 	time       uint64 `json:"time"`
 }
 */
+
+//DecodeUidResponseFunc extracts a user-domain response object from an HTTP response object
 func DecodeUidResponseFunc(_ context.Context, r *http.Response) (interface{}, error) {
 	buffer := make([]byte, 64)
 	r.Body.Read(buffer)
