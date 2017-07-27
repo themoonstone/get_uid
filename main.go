@@ -1,7 +1,8 @@
 package main
 
 import (
-	"encoding/json"
+	"strconv"
+	//"encoding/json"
 
 	"net/http"
 
@@ -39,12 +40,13 @@ func getuid(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	body, err := json.Marshal(sonyflake.Decompose(id))
+	//	body, err := json.Marshal(sonyflake.Decompose(id))
 
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.Header()["Content-Type"] = []string{"application/json; charset=utf-8"}
-	w.Write(body)
+	//	if err != nil {
+	//		http.Error(w, err.Error(), http.StatusInternalServerError)
+	//		return
+	//	}
+	//	w.Header()["Content-Type"] = []string{"application/json; charset=utf-8"}
+	s := strconv.Itoa(int(id))
+	w.Write([]byte(s))
 }
