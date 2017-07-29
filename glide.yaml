@@ -1,4 +1,5 @@
 package: get_uid
 import:
 - package: github.com/drone/routes
-- package: github.com/sony/sonyflake
+
+- package: github.com/go-kit/kit/transport/http

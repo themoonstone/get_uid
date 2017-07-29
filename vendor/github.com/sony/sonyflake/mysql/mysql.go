@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	dbhostip    = "127.0.0.1:3306"
+	dbhostip    = "192.168.1.175:3306"
 	dbusername  = "root"
 	dbpassword  = "123456"
 	dbtablename = "guid_mutex"

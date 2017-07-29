@@ -1,10 +1,20 @@
-hash: 9901f83b5511ad11dca001eda146cb9c6781babb81cf509c7d52f1de346c76b3
-updated: 2017-07-25T10:11:56.51815626+08:00
+hash: c29e470ec49fad3e9df2b0cce7e0b920ae94a48b4283b39a1a8051519fef493e
+updated: 2017-07-27T17:58:57.099741002+08:00
 imports:
 - name: github.com/drone/routes
   version: 853bef2b231162bb7b09355720416d3af1510d88
-- name: github.com/go-sql-driver/mysql
-  version: 3955978caca48c1658a4bb7a9c6a0f084e326af3
+- name: github.com/go-kit/kit
+  version: 19463ea8b215413a29c3513aa3a76181f4bac58d
+  subpackages:
+  - endpoint
+  - log
+  - transport/http
+- name: github.com/go-logfmt/logfmt
+  version: 390ab7935ee28ec6b286364bba9b4dd6410cb3d5
+- name: github.com/go-stack/stack
+  version: 817915b46b97fd7bb80e8ab6b69f01a53ac3eebf
+- name: github.com/kr/logfmt
+  version: b84e30acd515aadc4b783ad4ff83aff3299bdfe0
 - name: github.com/sony/sonyflake
   version: fa881fb1052b152e977c41023052c2f2a1c475e9
 testImports: []

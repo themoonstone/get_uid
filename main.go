@@ -1,12 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 	//"encoding/json"
 
 	"net/http"
 
-	"github.com/sony/sonyflake"
+	"get_uid/pkg/sonyflake"
 
 	"github.com/drone/routes"
 )
@@ -47,6 +48,7 @@ func getuid(w http.ResponseWriter, r *http.Request) {
 	//		return
 	//	}
 	//	w.Header()["Content-Type"] = []string{"application/json; charset=utf-8"}
-	s := strconv.Itoa(int(id))
+	s := fmt.Sprintf("id:%s\n", strconv.Itoa(int(id)))
+
 	w.Write([]byte(s))
 }
