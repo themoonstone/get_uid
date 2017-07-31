@@ -5,7 +5,7 @@ import (
 
 	"net/http"
 
-	"github.com/sony/sonyflake"
+	"get_uid/pkg/sonyflake"
 
 	"github.com/drone/routes"
 )

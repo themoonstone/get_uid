@@ -1,0 +1,9 @@
+FROM iron/go
+
+WORKDIR /etcd_uid
+
+ADD . /etcd_uid
+
+EXPOSE 9090
+
+ENTRYPOINT ["./etcd_uid"]

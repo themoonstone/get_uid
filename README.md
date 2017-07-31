@@ -1,11 +1,14 @@
 Overview
 =====
-Get_uid is a distributed unique ID generator inspired by [Twitter's Snowflake](https://blog.twitter.com/2010/announcing-snowflake):
+Get_uid is a distributed unique ID generator 
+in this package two methods is provided
+the first method inspired by [Twitter's Snowflake](https://blog.twitter.com/2010/announcing-snowflake):
 A Sonyflake ID is composed of
 
     39 bits for time in units of 10 msec
      8 bits for a sequence number
     16 bits for a machine id
+the second methos is to take advantage of the key-value and strong consistency of etcd to dynamically generate a globally unique id
 Build
 =====
 
@@ -15,6 +18,11 @@ The project could be build into a Dockerized server with 'make docker-build'. An
     $docker build -t get_uid .
 Run
 =====
+About the mysql database:
+
+    If you just call the get_uid package, you should install the mysql service on a master server to provide the auto_increment data.
+
+    but if what you want is obtain the global id through the interface ,you can  run the get_uid program directly.
 
 Start Mysql
 -----
