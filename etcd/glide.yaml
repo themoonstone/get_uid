@@ -1,0 +1,4 @@
+package: get_uid/etcd
+import:
+- package: get_uid/pkg/etcd
+- package: github.com/drone/routes
