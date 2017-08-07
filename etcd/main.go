@@ -4,8 +4,8 @@ import (
 	"get_uid/pkg/etcd"
 	"net/http"
 
-	"github.com/drone/routes"
 	"fmt"
+	"github.com/drone/routes"
 )
 
 var etcd_id *etcd.EtcdConfig
@@ -19,6 +19,7 @@ func InitId() {
 	etcd_id = &etcd.EtcdConfig{}
 	etcd_id.NewEtcdConfig(slice)
 }
+
 //
 func main() {
 
@@ -29,6 +30,7 @@ func main() {
 	http.ListenAndServe(":9090", nil)
 	//fmt.Println("hello")
 }
+
 //
 // the restful api
 // call it by curl localhost:port/user/etcuid

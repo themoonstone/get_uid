@@ -1,5 +1,19 @@
 package: get_uid
 import:
+- package: github.com/caarlos0/env
+  version: ^3.0.0
+- package: github.com/coreos/etcd
+  version: ^3.2.5
+  subpackages:
+  - client
 - package: github.com/drone/routes
-
-- package: github.com/go-kit/kit/transport/http
+- package: github.com/go-kit/kit
+  version: ^0.5.0
+  subpackages:
+  - transport/http
+- package: github.com/go-sql-driver/mysql
+  version: ^1.3.0
+- package: golang.org/x/net/context
+testImport:
+- package: github.com/deckarep/golang-set
+  version: ^1.6.0

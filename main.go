@@ -25,7 +25,6 @@ func InitId() {
 
 func main() {
 	InitId()
-
 	mux := routes.New()
 	mux.Get("/user/:uid", getuid)
 	http.Handle("/", mux)
